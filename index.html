@@ -69,13 +69,11 @@
       const viewer = document.getElementById("model-viewer");
       const button = document.getElementById("ar-button");
 
-      if (!viewer.canActivateAR) {
-        button.disabled = true;
-        button.textContent = "AR Not Supported";
-      }
-
-      button.addEventListener("click", () => {
-        viewer.activateAR();
+     viewer.addEventListener("load", () => {
+        if (!viewer.canActivateAR) {
+          button.disabled = true;
+          button.textContent = "AR Not Supported";
+        }
       });
     </script>
   </body>
