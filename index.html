@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,30 @@ HTML
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
     <style>
         body { margin: 0; padding: 0; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        model-viewer { width: 100%; height: 100%; }
+        model-viewer { width: 100%; height: 100%; position: relative; }
+        
+        /* Ensures the custom button is explicitly styled as a block and stays on top */
+        #ar-button {
+            position: absolute; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            padding: 12px 24px; 
+            background: #000; 
+            color: #fff; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold;
+            z-index: 999;
+            display: block;
+        }
+
+        /* Essential: Hides the custom button on desktop/non-AR capable setups */
+        #ar-button:not([ar-status="object-placed"]) {
+            display: block; 
+        }
+        
+        .hide { display: none; }
     </style>
 </head>
 <body>
@@ -17,7 +39,7 @@ HTML
         src="sofa.glb" 
         ios-src="sofa.usdz"
         ar 
-        ar-modes="webxr scene-viewer quick-look" 
+        ar-modes="quick-look scene-viewer webxr" 
         camera-controls 
         tone-mapping="neutral" 
         shadow-intensity="1" 
@@ -28,7 +50,7 @@ HTML
             <div class="update-bar"></div>
         </div>
         
-        <button slot="ar-button" id="ar-button" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: bold;">
+        <button slot="ar-button" id="ar-button">
             View in your space
         </button>
     </model-viewer>
