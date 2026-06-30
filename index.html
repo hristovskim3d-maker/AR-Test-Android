@@ -1,59 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My AR Model Viewer</title>
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AR Model Viewer</title>
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
     <style>
-        body { margin: 0; padding: 0; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        model-viewer { width: 100%; height: 100%; position: relative; }
-        
-        /* Ensures the custom button is explicitly styled as a block and stays on top */
-        #ar-button {
-            position: absolute; 
-            bottom: 20px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            padding: 12px 24px; 
-            background: #000; 
-            color: #fff; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: bold;
-            z-index: 999;
-            display: block;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        width: 100%;
+        height: 100dvh;
+      }
+      model-viewer {
+        width: 100%;
+        height: 100dvh;
+        position: relative;
+        z-index: 0;
+      }
 
-        /* Essential: Hides the custom button on desktop/non-AR capable setups */
-        #ar-button:not([ar-status="object-placed"]) {
-            display: block; 
-        }
-        
-        .hide { display: none; }
+      /* Ensures the custom button is explicitly styled as a block and stays on top */
+      #ar-button {
+        display: flex;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        z-index: 999;
+        width: auto;
+        height: auto;
+      }
+      #ar-button:disabled {
+        opacity: 0.5;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <model-viewer
+      id="model-viewer"
+      src="sofa.glb"
+      ios-src="sofa.usdz"
+      ar
+      ar-modes="quick-look scene-viewer webxr"
+      camera-controls
+      tone-mapping="neutral"
+      shadow-intensity="1"
+      exposure="1"
+      environment-image="legacy"
+    >
+      <div class="progress-bar hide" slot="progress-bar">
+        <div class="update-bar"></div>
+      </div>
 
-    <model-viewer 
-        src="sofa.glb" 
-        ios-src="sofa.usdz"
-        ar 
-        ar-modes="quick-look scene-viewer webxr" 
-        camera-controls 
-        tone-mapping="neutral" 
-        shadow-intensity="1" 
-        exposure="1" 
-        environment-image="legacy">
-        
-        <div class="progress-bar hide" slot="progress-bar">
-            <div class="update-bar"></div>
-        </div>
-        
-        <button slot="ar-button" id="ar-button">
-            View in your space
-        </button>
+      <button id="ar-button">View in your space</button>
     </model-viewer>
 
-</body>
+    <script>
+      const viewer = document.getElementById("model-viewer");
+      const button = document.getElementById("ar-button");
+
+      if (!viewer.canActivateAR) {
+        button.disabled = true;
+        button.textContent = "AR Not Supported";
+      }
+
+      button.addEventListener("click", () => {
+        viewer.activateAR();
+      });
+    </script>
+  </body>
 </html>
